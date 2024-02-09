@@ -10,7 +10,7 @@ const Users = require("./models/Users");
 const path = require("path");
 const { pid } = require("process");
 const { log } = require("console");
-
+const BulkData2 = require("./models/BulkData1");
 const app = express();
 const port = process.env.PORT || 5002;
 
@@ -56,6 +56,22 @@ app.get("/getBulkData", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error getting data from Database." });
   }
+});
+app.get("/getBulkData2", async (req, res) => {
+  try {
+    const entries = await BulkData2.find();
+
+    res.status(200).json({ entries });
+  } catch (error) {
+    res.status(500).json({ error: "Error getting data from Database." });
+  }
+});
+// Serve static files from the 'client/build' folder
+app.use(express.static(path.join(__dirname, "..", "client", "build")));
+
+// Handle any other routes by serving the 'index.html' file
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
 });
 // Serve static files from the 'client/build' folder
 app.use(express.static(path.join(__dirname, "..", "client", "build")));
@@ -143,11 +159,27 @@ app.post("/getPatient", async (req, res) => {
 
 // Continue with other configurations and server setup
 
-app.post("/addBulkData", async (req, res) => {
+app.post("/addBulkData1", async (req, res) => {
   try {
     const jsonData = req.body;
     const stringData = jsonData.data;
     const newEntry = new BulkData({ data: stringData });
+    const savedEntry = await newEntry.save();
+
+    res
+      .status(200)
+      .json({ message: "Data saved successfully!", data: savedEntry.data });
+  } catch (error) {
+    console.error("Error saving data:", error);
+    res.status(500).json({ error: "Error saving data to the database." });
+  }
+});
+
+app.post("/addBulkData2", async (req, res) => {
+  try {
+    const jsonData = req.body;
+    const stringData = jsonData.data;
+    const newEntry = new BulkData2({ data: stringData });
     const savedEntry = await newEntry.save();
 
     res

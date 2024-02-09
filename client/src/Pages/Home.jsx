@@ -598,8 +598,21 @@ const Home = () => {
 
   return (
     <div style={{ padding: "1rem " }}>
-      <div style={{ paddingBottom: "2rem", textAlign: "center" }}>
+      <div style={{ paddingBottom: "2rem", textAlign: "left" }}>
         <h2>POST DATA</h2>
+        <span
+          className="TopMenuTxt"
+          style={{ float: "right", marginRight: "-60px" }}
+        >
+          <Button
+            key="excelImport"
+            type="primary"
+            onClick={handleExcelImport}
+            style={{ marginRight: "70px", marginTop: "-100px" }}
+          >
+            Export Report <DownloadOutlined />
+          </Button>
+        </span>
       </div>
       <Table
         dataSource={PatientAll}
